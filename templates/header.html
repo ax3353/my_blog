@@ -1,0 +1,51 @@
+<!-- 定义导航栏 -->
+<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+    <a class="navbar-brand text-white" href="#">zkcode的个人博客</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link text-white-50" href="{% url 'article:article-list' %}">文章</a>
+            </li>
+            <!-- Django的 if 模板语句 -->
+            {% if user.is_authenticated %}
+            <!-- 如果用户已经登录，则显示用户名下拉框 -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white-50" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ user.username }}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href='{% url 'userprofile:edit' user.id %}'>个人信息</a>
+                    <a class="dropdown-item" href="{% url 'article:article-create' %}">写文章</a>
+                    <a class="dropdown-item" href="#" onclick="user_delete()">删除用户</a>
+                    <a class="dropdown-item" href='{% url "userprofile:logout" %}'>退出登录</a>
+                </div>
+            </li>
+            <!-- 如果用户未登录，则显示 “登录” -->
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link text-white-50" href="{% url 'userprofile:login' %}">登录</a>
+            </li>
+            <!-- if 语句在这里结束 -->
+            {% endif %}
+        </ul>
+        <form class="form-inline my-2 my-lg-0" action=".">
+            <input class="form-control mr-sm-2" type="text" name="search" placeholder="搜索文章" aria-label="Search" required>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+        </form>
+    </div>
+</nav>
+
+{% if user.is_authenticated %}
+<script>
+    function user_delete() {
+        // 调用layer弹窗组件
+        layer.open({
+            title: "确认删除",
+            content: "确认删除用户资料吗？",
+            yes: function(index, layero) {
+                location.href='{% url "userprofile:delete" user.id %}'
+            },
+        })
+    }
+</script>
+{% endif %}
