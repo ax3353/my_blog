@@ -26,7 +26,11 @@ urlpatterns = [
     path('userprofile/', include('userprofile.urls', namespace='userprofile')),
     # 配置password_reset的根路由
     path('password-reset/', include('password_reset.urls')),
+    # 配置mdeditor的根路由
+    path(r'mdeditor/', include('mdeditor.urls')),
 ]
 
 # 配置上传文件URL路径
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    # static files (images, css, javascript, etc.)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

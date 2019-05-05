@@ -9,10 +9,12 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
+import datetime
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from mdeditor.configs import MDConfig
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -31,6 +33,8 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    # suit必须放在'django.contrib.admin'之前用来替换django默认的admin后台界面
+    'suit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +50,8 @@ INSTALLED_APPS = [
     'password_reset',
     # 激活taggit应用
     'taggit',
+    # 激活mdeditor应用
+    'mdeditor',
 ]
 
 MIDDLEWARE = [
@@ -115,19 +121,31 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# django-suit配置
+SUIT_CONFIG = {
+    'ADMIN_NAME': 'zkcode的博客管理后台'
+}
 
-# Internationalization
+# django-mdeditor配置
+MDEDITOR_CONFIGS = {
+    'default':{
+        'upload_image_formats': ["jpg", "jpeg", "gif", "png", "bmp", "webp"],  # image upload format type
+        'image_floder': 'editor/{0:%Y%m%d}'.format(datetime.date.today()),  # image save the folder name
+        'search_replace': True,  # Whether to open the search for replacement
+        'emoji': True,  # whether to open the expression function
+        'tex': True,  # whether to open the tex chart function
+    }
+}
+
+# 国际化
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
+LANGUAGE_CODE = 'zh-Hans'
+TIME_ZONE = 'Asia/Shanghai'
 USE_I18N = True
-
-USE_L10N = True
-
+USE_L10N = False
 USE_TZ = True
+DATETIME_FORMAT = 'Y-m-d H:i:s'
+DATE_FORMAT = 'Y-m-d'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -140,7 +158,7 @@ EMAIL_HOST = 'smtp.qq.com'
 # 你的邮箱名！
 EMAIL_HOST_USER = '247213579@qq.com'
 # 你的邮箱密码
-EMAIL_HOST_PASSWORD = 'itkkkwxisfihbgja'
+EMAIL_HOST_PASSWORD = 'your password'
 # 发送邮件的端口
 EMAIL_PORT = 25
 # 是否使用 TLS
@@ -149,5 +167,5 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'zkcode的博客 <247213579@qq.com>'
 
 # MEDIA_ROOT和MEDIA_URL是用户上传文件保存、访问的位置
-MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = '/media/'

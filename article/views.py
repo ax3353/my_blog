@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from taggit.managers import TaggableManager
 
 from article.forms import ArticlePostForm
 from article.models import ArticlePost, ArticleColumn
@@ -47,8 +48,9 @@ def article_detail(request, id):
         'markdown.extensions.codehilite',
         # 目录扩展
         'markdown.extensions.toc',
-    ])
+    ], safe_mode=True, enable_attributes=False)
     article.body = md.convert(article.body)
+
     context = {'article': article, 'toc': md.toc }
 
     # 浏览量 +1
@@ -125,6 +127,15 @@ def article_update(request, id):
                 article.column = ArticleColumn.objects.get(id=request.POST['column'])
             else:
                 article.column = None
+
+            tags = request.POST['tags']
+            if tags.strip() != '':
+                tags_arr = tags.replace(' ','').split(',')
+                article.tags.set(*tags_arr, clear=False)
+            else:
+                article.tags.clear()
+
+            # 保存article
             article.save()
             return redirect('article:article-detail', id=id)
         else:
