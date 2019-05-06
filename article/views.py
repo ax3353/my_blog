@@ -6,7 +6,6 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from taggit.managers import TaggableManager
 
 from article.forms import ArticlePostForm
 from article.models import ArticlePost, ArticleColumn
