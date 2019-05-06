@@ -129,7 +129,7 @@ def article_update(request, id):
 
             tags = request.POST['tags']
             if tags.strip() != '':
-                tags_arr = tags.replace(' ','').split(',')
+                tags_arr = tags.replace(' ', '').split(',')
                 article.tags.set(*tags_arr, clear=False)
             else:
                 article.tags.clear()
